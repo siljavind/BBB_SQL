@@ -121,7 +121,7 @@ GO
 
 --#region CREATE PROCEDURE
 CREATE PROCEDURE NewBooking @Date DATETIME, @User INT, @Machine INT -- So.. I wanted to create a procedure, so I could separate it from the main query.
-AS																	-- Would have been a great idea, if I didn't have to turn it in to another person (on another computer)
+AS								    -- Would have been a great idea, if I didn't have to turn it in to another person (on another computer)
 
 DECLARE @AccountBalance DECIMAL = (SELECT AccountBalance FROM Users WHERE Users.Id = @User) -- The amount of money on account
 DECLARE @WashPrice DECIMAL(18,2) = (SELECT WashPrice FROM Machines WHERE Machines.Id = @Machine) -- The price of a single wash on chosen machine
@@ -138,7 +138,7 @@ BEGIN
 		IF (CAST(@Date AS TIME) BETWEEN (@OpenHours) AND (@ClosedHours)) -- Checks if the laundromat is even open at requested time
 		BEGIN
 			INSERT INTO Bookings (BookingTime, [User_Id], Machine_Id) VALUES (@Date, @User, @Machine) -- Inserts the local variables into a new booking
-			UPDATE Users SET Users.AccountBalance -= @WashPrice WHERE Users.Id = @User -- Removes the cost of a wash from the users account after succesful booking
+			UPDATE Users SET AccountBalance -= @WashPrice WHERE Users.Id = @User -- Removes the cost of a wash from the users account after succesful booking
 		END
 	END			
 END
